@@ -150,8 +150,7 @@ def object_aware_crop(image_path, label_path, image_saving_path, label_saving_pa
         label_path: string
         image_saving_path: string
         label_saving_path: string
-        #coordinate_saving_path: string.
-        is_training_set: boolean
+        extra_patch_num: integer
         label_format: string, label format.
     Returns:
         None.
@@ -159,6 +158,7 @@ def object_aware_crop(image_path, label_path, image_saving_path, label_saving_pa
     image_name = image_path.split("/")[-1].split(".")[0]  # Get the image and label name
     label_name = label_path.split("/")[-1].split(".")[0]
     # Open the label file, put all the boxes in a list
+
     boxes = get_boxes_from_label(label_path)  # Get boxes from a given label file.
     img = Image.open(image_path)
     boxes_flag = np.zeros(len(boxes))  # To indicate if a box has already been included in an patch or not.
@@ -167,7 +167,7 @@ def object_aware_crop(image_path, label_path, image_saving_path, label_saving_pa
         if boxes_flag[i] == 0:  # If the current box is not included in any saved patch.
             x_start, x_end, y_start, y_end = box_in_patch_coordinate_range(box)
             print(current_patch_number)
-            while 1+extra_patch_num >= 1:
+            while extra_patch_num >= 0:
                 extra_patch_num -= 1
                 while True:
                     xp = random.randint(x_start, x_end)
